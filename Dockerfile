@@ -28,6 +28,7 @@ COPY . .
 RUN npm run build
 
 FROM nginx:1.27-alpine
-LABEL org.opencontainers.image.source="https://github.com/aherkstroeter/www"
+# This package is linked to the cluster repository. A push from www is denied.
+LABEL org.opencontainers.image.source="https://github.com/aherkstroeter/kubernetes-cloudlab"
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /src/public /usr/share/nginx/html
