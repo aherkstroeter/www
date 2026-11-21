@@ -1,0 +1,29 @@
+{{ define "main" }}
+<article class="essay">
+  <div class="essay-grid">
+    <div class="prose-col">
+      <h1>{{ .Title }}</h1>
+      {{- with .Description }}
+      <p class="deck">{{ . }}</p>
+      {{- end }}
+      <p class="meta"><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2 January 2006" }}</time></p>
+      <div class="prose">
+        {{ .Content }}
+      </div>
+    </div>
+    {{- if ge (partial "toc-count.html" .) 2 }}
+    <aside class="toc">
+      <p class="toc-label">Contents</p>
+      {{ .TableOfContents }}
+    </aside>
+    {{- end }}
+  </div>
+  {{- $others := partial "essay-list.html" (dict "exclude" . "empty" "hide") -}}
+  {{- if gt (len (trim $others " \n\r\t")) 0 }}
+  <section class="others" aria-labelledby="others-label">
+    <h2 id="others-label">Other essays</h2>
+    {{ $others | safeHTML }}
+  </section>
+  {{- end }}
+</article>
+{{ end }}

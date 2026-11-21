@@ -1,0 +1,7 @@
+node_modules/
+public/
+public-empty/
+public-fixture/
+.build/
+resources/
+.hugo_build.lock

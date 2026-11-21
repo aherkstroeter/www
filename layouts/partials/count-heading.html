@@ -1,0 +1,8 @@
+{{- $n := 0 -}}
+{{- if and (ge .Level 2) (le .Level 3) -}}
+  {{- $n = 1 -}}
+{{- end -}}
+{{- range .Headings -}}
+  {{- $n = add $n (partial "count-heading.html" .) -}}
+{{- end -}}
+{{- return $n -}}

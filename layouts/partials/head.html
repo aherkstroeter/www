@@ -1,0 +1,23 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+{{- $title := .Site.Title -}}
+{{- if eq .Kind "404" -}}
+  {{- $title = "This page is not here." -}}
+{{- else if not .IsHome -}}
+  {{- $title = printf "%s — %s" .Title .Site.Title -}}
+{{- end }}
+<title>{{ $title }}</title>
+{{- $desc := .Description -}}
+{{- if and (not $desc) .IsHome -}}
+  {{- $desc = .Site.Params.description -}}
+{{- end -}}
+{{- with $desc }}
+<meta name="description" content="{{ . }}">
+{{- end }}
+<link rel="icon" href="{{ "favicon.svg" | relURL }}" type="image/svg+xml">
+{{- with resources.Get "css/main.css" | minify | fingerprint }}
+<link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}">
+{{- end }}
+{{- if .IsHome }}
+<link rel="alternate" type="application/rss+xml" title="{{ .Site.Title }}" href="{{ "index.xml" | relURL }}">
+{{- end }}

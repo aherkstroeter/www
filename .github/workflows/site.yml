@@ -1,0 +1,51 @@
+name: site
+
+on:
+  push:
+    branches: [master]
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ghcr.io/aherkstroeter/www:${{ github.sha }}
+
+      - uses: actions/checkout@v4
+        with:
+          repository: aherkstroeter/kubernetes-cloudlab
+          ref: master
+          ssh-key: ${{ secrets.CLUSTER_DEPLOY_KEY }}
+          path: cluster
+          fetch-depth: 0
+
+      - name: set the image tag
+        working-directory: cluster
+        run: |
+          git config user.name "Anselm Herkströter"
+          git config user.email "anselmherkstroeter@protonmail.com"
+          git pull --rebase origin master
+          sed -i -E "s|image: ghcr.io/aherkstroeter/www:.*|image: ghcr.io/aherkstroeter/www:${{ github.sha }}|" \
+            02_ArgoCD/03_workloads/www/manifests/deployment.yaml
+          if git diff --quiet -- 02_ArgoCD/03_workloads/www/manifests/deployment.yaml; then
+            exit 0
+          fi
+          git add 02_ArgoCD/03_workloads/www/manifests/deployment.yaml
+          git commit -m "MOD set the site image tag"
+          git push origin HEAD:master
+          git push origin HEAD:main

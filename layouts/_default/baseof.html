@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {{- partial "head.html" . -}}
+</head>
+{{- $class := "is-index" -}}
+{{- if and .IsPage (eq .Section "writing") -}}
+  {{- $class = "is-essay" -}}
+  {{- if ge (partial "toc-count.html" .) 2 -}}
+    {{- $class = printf "%s has-toc" $class -}}
+  {{- end -}}
+{{- end }}
+<body class="{{ $class }}">
+  <a class="skip" href="#content">Skip to content</a>
+  <div class="wrap">
+    {{- if not .IsHome -}}
+      {{- partial "header.html" . -}}
+    {{- end }}
+    <main id="content">
+      {{- block "main" . }}{{- end }}
+    </main>
+  </div>
+</body>
+</html>

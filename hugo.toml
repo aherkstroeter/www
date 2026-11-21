@@ -1,0 +1,38 @@
+baseURL = "https://anselmherkstroeter.com/"
+locale = "en"
+title = "Anselm Herkströter"
+enableRobotsTXT = true
+enableEmoji = false
+disableKinds = ["taxonomy", "term"]
+
+[permalinks]
+  writing = "/:slug/"
+
+[outputs]
+  home = ["HTML", "RSS"]
+  section = ["HTML"]
+  page = ["HTML"]
+
+[params]
+  email = "anselmherkstroeter@protonmail.com"
+  description = "I set up single sign-on for Kubernetes. The work is the path from an identity provider into the cluster, and the credentials that still have to be there after the disks are gone."
+
+[markup]
+  [markup.highlight]
+    noClasses = false
+    guessSyntax = false
+    lineNos = false
+    lineNumbersInTable = false
+    tabWidth = 2
+  [markup.goldmark]
+    [markup.goldmark.extensions]
+      typographer = false
+      linkify = false
+    [markup.goldmark.renderer]
+      unsafe = true
+      hardWraps = false
+      xhtml = false
+  [markup.tableOfContents]
+    startLevel = 2
+    endLevel = 3
+    ordered = false

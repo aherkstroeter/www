@@ -1,0 +1,48 @@
+{{- $skip := "" -}}
+{{- with .exclude -}}
+  {{- $skip = .RelPermalink -}}
+{{- end -}}
+{{- $starters := slice -}}
+{{- $rest := slice -}}
+{{- range (where site.RegularPages "Section" "writing").ByDate.Reverse -}}
+  {{- if ne .RelPermalink $skip -}}
+    {{- if .Params.start -}}
+      {{- $starters = $starters | append . -}}
+    {{- else -}}
+      {{- $rest = $rest | append . -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- if and (not $starters) (not $rest) -}}
+  {{- if ne .empty "hide" }}
+<p class="empty">No essays yet.</p>
+  {{- end -}}
+{{- else }}
+<ol class="essays">
+  {{- range $i, $p := $starters }}
+  <li>
+    {{- if and $.showKicker (eq $i 0) }}
+    <p class="kicker">Start here</p>
+    {{- end }}
+    <div class="essay-row">
+      <a class="essay-title" href="{{ $p.RelPermalink }}">{{ $p.Title }}</a>
+      <time datetime="{{ $p.Date.Format "2006-01-02" }}">{{ $p.Date.Format "2 January 2006" }}</time>
+    </div>
+    {{- with $p.Description }}
+    <p class="essay-deck">{{ . }}</p>
+    {{- end }}
+  </li>
+  {{- end }}
+  {{- range $p := $rest }}
+  <li>
+    <div class="essay-row">
+      <a class="essay-title" href="{{ $p.RelPermalink }}">{{ $p.Title }}</a>
+      <time datetime="{{ $p.Date.Format "2006-01-02" }}">{{ $p.Date.Format "2 January 2006" }}</time>
+    </div>
+    {{- with $p.Description }}
+    <p class="essay-deck">{{ . }}</p>
+    {{- end }}
+  </li>
+  {{- end }}
+</ol>
+{{- end -}}
