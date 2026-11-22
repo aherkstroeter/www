@@ -3,9 +3,4 @@
 <div class="intro">
   {{ .Content }}
 </div>
-<p class="contact"><a href="mailto:{{ .Site.Params.email }}">{{ .Site.Params.email }}</a></p>
-<section class="writing" aria-labelledby="writing-label">
-  <h2 id="writing-label">Writing</h2>
-  {{ partial "essay-list.html" (dict "showKicker" true) }}
-</section>
 {{ end }}
